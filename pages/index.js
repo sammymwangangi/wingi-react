@@ -1,69 +1,154 @@
-import ReactDOM from 'react-dom';
-import { Menu, Icon } from 'antd';
+import Layout from "../components/MyLayout";
+import Link from "next/link";
 
-const { SubMenu } = Menu;
-
-class App extends React.Component {
-  state = {
-    current: 'home',
-  };
-
-  handleClick = e => {
-    console.log('click ', e);
-    this.setState({
-      current: e.key,
-    });
-  };
-
-  render() {
-    return (
-      <Menu
-        onClick={this.handleClick}
-        selectedKeys={[this.state.current]}
-        mode="horizontal"
-      >
-        <Menu.Item key="wechat">
-          <Icon
-            type="wechat"
-            style={{ fontSize: "16px", color: "#08c" }}
-            theme="outlined"
-          />
-          NexForum
-        </Menu.Item>
-        <Menu.Item key="home">
-          <Icon type="home" />
-          Home
-        </Menu.Item>
-        <Menu.Item key="alipay">
-          <a
-            href="https://ant.design"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Icon type="appstore" />
-            Create Discussion
-          </a>
-        </Menu.Item>
-        <SubMenu
-          title={
-            <span className="submenu-title-wrapper">
-              <Icon type="user" />
-              Sammy
-            </span>
-          }
-        >
-          <Menu.ItemGroup title="Profile">
-            <Menu.Item key="setting:1">Edit Profile</Menu.Item>
-            <Menu.Item key="setting:2">Change Password</Menu.Item>
-          </Menu.ItemGroup>
-          <Menu.ItemGroup title="Account">
-            <Menu.Item key="setting:3">Settings</Menu.Item>
-            <Menu.Item key="setting:4">LogOut</Menu.Item>
-          </Menu.ItemGroup>
-        </SubMenu>
-      </Menu>
-    );
-  }
+function getPosts() {
+  return [
+    { id: "hello-nextjs", title: "Hello Next.js" },
+    { id: "learn-nextjs", title: "Learn Next.js is awesome" },
+    { id: "deploy-nextjs", title: "Deploy apps with ZEIT" }
+  ];
 }
 
-export default App
+const PostLink = ({ post }) => (
+  <li>
+    <Link href="/p/[id]" as={`/p/${post.id}`}>
+      <a>{post.title}</a>
+    </Link>
+    <style jsx>{`
+      li {
+        list-style: none;
+        margin: 5px 0;
+      }
+
+      a {
+        text-decoration: none;
+        color: blue;
+        font-family: "Arial";
+      }
+
+      a:hover {
+        opacity: 0.6;
+      }
+    `}</style>
+  </li>
+);
+
+export default function Blog() {
+  return (
+    <Layout>
+      <h1>My Blog</h1>
+      <ul>
+        {getPosts().map(post => (
+          <PostLink key={post.id} post={post} />
+        ))}
+      </ul>
+      <style jsx>{`
+        h1,
+        a {
+          font-family: "Arial";
+        }
+
+        ul {
+          padding: 0;
+        }
+
+        li {
+          list-style: none;
+          margin: 5px 0;
+        }
+
+        a {
+          text-decoration: none;
+          color: blue;
+        }
+
+        a:hover {
+          opacity: 0.6;
+        }
+      `}</style>
+    </Layout>
+  );
+}
+
+// ROUND 2
+
+// import Layout from "../components/MyLayout";
+// import Link from "next/link";
+// import fetch from "isomorphic-unfetch";
+
+// const Index = props => (
+//   <Layout>
+//     <h1>Batman TV Shows</h1>
+//     <ul>
+//       {props.shows.map(show => (
+//         <li key={show.id}>
+//           <Link href="/p/[id]" as={`/p/${show.id}`}>
+//             <a>{show.name}</a>
+//           </Link>
+//         </li>
+//       ))}
+//     </ul>
+//     <style jsx>{`
+//       h1,
+//       a {
+//         font-family: "Arial";
+//       }
+
+//       ul {
+//         padding: 0;
+//       }
+
+//       li {
+//         list-style: none;
+//         margin: 5px 0;
+//       }
+
+//       a {
+//         text-decoration: none;
+//         color: blue;
+//       }
+
+//       a:hover {
+//         opacity: 0.6;
+//       }
+//     `}</style>
+//   </Layout>
+// );
+
+// Index.getInitialProps = async function() {
+//   const res = await fetch("https://api.tvmaze.com/search/shows?q=batman");
+//   const data = await res.json();
+
+//   console.log(`Show data fetched. Count: ${data.length}`);
+
+//   return {
+//     shows: data.map(entry => entry.show)
+//   };
+// };
+
+// export default Index;
+
+
+// import Layout from '../components/MyLayout';
+// import Link from 'next/link';
+
+// const PostLink = props => (
+//   <li>
+//     <Link href="/p/[id]" as={`/p/${props.id}`}>
+//       <a>{props.id}</a>
+//     </Link>
+//   </li>
+// );
+
+// export default function Blog() {
+//   return (
+//     <Layout>
+//       <h1>My Blog</h1>
+//       <ul>
+//         <PostLink id="hello-nextjs" />
+//         <PostLink id="learn-nextjs" />
+//         <PostLink id="deploy-nextjs" />
+//       </ul>
+//     </Layout>
+//   );
+// }
